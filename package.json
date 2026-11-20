@@ -1,0 +1,14 @@
+{
+  "name": "invoice-kit",
+  "version": "1.4.0",
+  "private": true,
+  "description": "Invoice totals in integer cents: line items, discounts, tax and payment terms.",
+  "type": "module",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}

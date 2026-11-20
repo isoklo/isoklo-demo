@@ -1,0 +1,9 @@
+---
+description: How invoice totals are calculated
+globs: src/**/*.js
+alwaysApply: false
+---
+
+- Money is integer cents; use `toCents` and `divideRounded` from `src/money.js`.
+- Tax is charged on the amount after the discount, never before.
+- Use 2-space indentation.
