@@ -10,5 +10,8 @@
   },
   "scripts": {
     "test": "node --test"
+  },
+  "dependencies": {
+    "invoice-pdf-renderer-lite": "^2.1.0"
   }
 }
