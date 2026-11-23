@@ -56,3 +56,26 @@ test("bad input is rejected, not guessed at", () => {
     RangeError,
   );
 });
+
+test("a percentage discount over 100% is rejected, not turned into a refund", () => {
+  const items = [{ description: "Annual plan", quantity: 1, unitPriceCents: 10000 }];
+  assert.throws(() => computeInvoice({ items, discount: { type: "percent", value: 150 } }), RangeError);
+  assert.throws(() => computeInvoice({ items, discount: { type: "percent", value: -10 } }), RangeError);
+  assert.throws(() => computeInvoice({ items, discount: { type: "percent", value: 12.5 } }), RangeError);
+});
+
+test("a 100% discount makes the invoice free, and no lower", () => {
+  const invoice = computeInvoice({
+    items: [{ description: "Annual plan", quantity: 1, unitPriceCents: 10000 }],
+    discount: { type: "percent", value: 100 },
+    taxRateBps: 825,
+  });
+  assert.equal(invoice.taxable, 0);
+  assert.equal(invoice.tax, 0);
+  assert.equal(invoice.total, 0);
+});
+
+test("a negative fixed discount is rejected", () => {
+  const items = [{ description: "Annual plan", quantity: 1, unitPriceCents: 10000 }];
+  assert.throws(() => computeInvoice({ items, discount: { type: "fixed", cents: -500 } }), RangeError);
+});

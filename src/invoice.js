@@ -30,7 +30,17 @@ export function lineTotal({ description, quantity, unitPriceCents }) {
 
 function discountFor(subtotal, discount) {
   if (discount === undefined) return 0;
-  if (discount.type === "percent") return divideRounded(subtotal * discount.value, 100);
-  if (discount.type === "fixed") return Math.min(discount.cents, subtotal);
+  if (discount.type === "percent") {
+    if (!Number.isInteger(discount.value) || discount.value < 0 || discount.value > 100) {
+      throw new RangeError(`a percentage discount must be a whole number from 0 to 100: ${discount.value}`);
+    }
+    return divideRounded(subtotal * discount.value, 100);
+  }
+  if (discount.type === "fixed") {
+    if (!Number.isInteger(discount.cents) || discount.cents < 0) {
+      throw new RangeError(`a fixed discount must be zero or more whole cents: ${discount.cents}`);
+    }
+    return Math.min(discount.cents, subtotal);
+  }
   throw new TypeError(`unknown discount type: ${discount.type}`);
 }
